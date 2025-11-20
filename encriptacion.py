@@ -1,6 +1,5 @@
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
-
+import clavesRsa
+import codificarAes
 
 print("Programa para encriptacion/desencriptacion de archivos")
 print("Selecciona una opcion\n")
@@ -10,11 +9,11 @@ print("3) Generar par de claves RSA")
 opcion = input("Escribe un numero: ")
 match opcion:
     case "1":
-        import clavesRsa
-        clavesRsa.generar()
+        pass
     case "2":
         pass
     case "3":
-        pass
+        
+        clavesRsa.generar(input("Escribe tu nombre: "))
     case _:
         print("Opcion invalida, ejecuta el programa de nuevo")
