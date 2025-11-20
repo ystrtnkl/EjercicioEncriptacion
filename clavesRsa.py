@@ -1,0 +1,3 @@
+def generar():
+    print("encriptar")
+
