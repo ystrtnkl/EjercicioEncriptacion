@@ -6,7 +6,7 @@ from cryptography.hazmat.backends import default_backend
 def generar_clave():
     return os.urandom(16)
 
-def encrypt_file(archivo_in, archivo_out, clave):
+def encriptar(archivo_in, archivo_out, clave):
     iv = os.urandom(16)
     
     with open(archivo_in, "rb") as f:
@@ -24,7 +24,7 @@ def encrypt_file(archivo_in, archivo_out, clave):
 
     print("Archivo encriptado en " + archivo_out)
 
-def decrypt_file(archivo_in, archivo_out, claves):
+def desencriptar(archivo_in, archivo_out, claves):
     with open(archivo_in, "rb") as f:
         filedata = f.read()
 

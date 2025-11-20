@@ -1,6 +1,10 @@
 import clavesRsa
 import codificarAes
 
+clave = codificarAes.generar_clave()
+codificarAes.encriptar("Untitled.jpeg", "nuevo.jpeg", clave)
+codificarAes.desencriptar("nuevo.jpeg", "final.jpeg", clave)
+
 print("Programa para encriptacion/desencriptacion de archivos")
 print("Selecciona una opcion\n")
 print("1) Encriptar archivo")
