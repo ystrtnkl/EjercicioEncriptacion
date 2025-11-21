@@ -15,7 +15,7 @@ def generar(nombre):
 
 def encriptar(nombre, texto):
     with open(nombre + "-publica.pem", "rb") as f:
-        publica = serialization.load_pem_public_key(f.read(), password=None)
+        publica = serialization.load_pem_public_key(f.read())
         return publica.encrypt(texto,padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(),label=None))
 
 def desencriptar(nombre, texto):

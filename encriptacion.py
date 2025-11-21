@@ -4,18 +4,6 @@ import empaquetar
 import os
 import sys
 
-print("Programa para encriptacion/desencriptacion de archivos")
-print("Selecciona una opcion\n")
-print("1) Encriptar archivo")
-print("2) Desencriptar archivo")
-print("3) Generar par de claves RSA")
-opcion = input("\nEscribe un numero/opcion: ")
-print("")
-
-
-
-
-
 def proceso_encriptar():
     print("Elige los archivos a encriptar (rutas separadas por espacios)")
     archivos = input("Archivos: ")
@@ -33,12 +21,12 @@ def proceso_encriptar():
         decision_empaquetar = ""
         if len(archivos) > 1:    
             print("¿Deseas empaquetar los archivos encriptados en un solo archivo?")
-            decision_empaquetar = input("(en blanco = no, escribir nombre de archivo empaquetado = si): ")
+            decision_empaquetar = input("(en blanco = no, escribir nombre de archivo empaquetado = si, usando ese archivo): ")
             print("")
             
         print("Se generara una clave AES128 aleatoria, ¿Deseas encriptar esta clave con una clave pública RSA? Ten en cuenta que solo quien tenga la clave privada podra desencriptarlos")
         print("En caso de que si el nombre con la clave publica (tiene que haber en esta carpeta un archivo llamado <nombre>-publica.pem, si no lo hay reinicia el programa y usa la opcion 3)")
-        publica = input("(en blanco = no, escribir nombre = si): ")
+        publica = input("(en blanco = no, escribir nombre = si, usando ese nombre): ")
         print("")
         if os.path.exists(publica + "-publica.pem") == False and publica != "":
             print("No se ha encontrado el archivo " + publica + "-publica.pem, la clave AES128 NO se encriptara (puedes cerrar el programa y volver a intentarlo con otro nombre)")
@@ -98,9 +86,6 @@ def proceso_encriptar():
     else:
         print("Intentalo otra vez con archivos que existan")
 
-
-
-
 def proceso_desencriptar():
     print("Antes de desencriptar, responde con sinceridad estas preguntas (si no lo haces los archivo(s) podrian no desencriptarse correctamente)")
     print("¿Tu archivo esta empaquetado?")
@@ -159,12 +144,16 @@ def proceso_desencriptar():
         empaquetar.desempaquetar(empaquetado + ".temp", carpeta=carpeta)
         os.remove(empaquetado + ".temp")
             
-    
-    
-    
-    
-
-
+            
+            
+            
+print("Programa para encriptacion/desencriptacion de archivos")
+print("Selecciona una opcion\n")
+print("1) Encriptar archivo")
+print("2) Desencriptar archivo")
+print("3) Generar par de claves RSA")
+opcion = input("\nEscribe un numero/opcion: ")
+print("")
 
 match opcion:
     case "1":
