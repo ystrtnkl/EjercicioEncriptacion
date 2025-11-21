@@ -1,13 +1,16 @@
 import clavesRsa
 import codificarAes
 import empaquetar
+import administracion
 import os
 import sys
 
+#Lo que ocurre en la opcion de encriptar
 def proceso_encriptar():
     print("Elige los archivos a encriptar (rutas separadas por espacios)")
     archivos = input("Archivos: ")
     print("")
+    archivos_original = archivos
     archivos = archivos.split(" ")
     correcto = True
     if len(archivos) == 0:
@@ -58,10 +61,10 @@ def proceso_encriptar():
                     print("Clave guardada en " + guardar_aes128)
                         
         if decision_empaquetar == "":
-            sufijo = input("Sufijo para los archivos encriptados para diferenciarlos (por defecto .encriptado): ")
+            sufijo = input("Sufijo para los archivos encriptados para diferenciarlos (por defecto .aes): ")
             print("")
             if sufijo == "":
-                sufijo = ".encriptado"
+                sufijo = ".aes"
             for e in archivos:
                 codificarAes.encriptar(e, e + sufijo, aes128)
                     
@@ -83,9 +86,15 @@ def proceso_encriptar():
                 print("Los archivos " + ", ".join(archivos) + "se han empaquetado en " + decision_empaquetar + " encriptados bajo la clave AES128 que esta en " + guardar_aes128 + ", dicha clave no esta encriptada (ten cuidado)")
             else:
                 print("Los archivos " + ", ".join(archivos) + "se han empaquetado en " + decision_empaquetar + " encriptados bajo la clave AES128 que esta en " + guardar_aes128 + " encriptada con RSA bajo el nombre de " + publica)
+
+        if decision_empaquetar == "":
+            administracion.guardar_registro_clave(aes128, publica, archivos_original, sufijo)
+        else:
+            administracion.guardar_registro_clave(aes128, publica, decision_empaquetar, sufijo)
     else:
         print("Intentalo otra vez con archivos que existan")
 
+#Lo que ocurre en la opcion de desencriptar
 def proceso_desencriptar():
     print("Antes de desencriptar, responde con sinceridad estas preguntas (si no lo haces los archivo(s) podrian no desencriptarse correctamente)")
     print("¿Tu archivo esta empaquetado?")
@@ -121,10 +130,10 @@ def proceso_desencriptar():
                     print("No se ha encontrado " + e)
                     correcto = False
         if correcto:
-            print("¿Que sufijo quieres agregar a los archivos desencriptados para diferenciarlos? (por defecto .desencriptado)")
-            sufijo = input("Prefijo (en blanco para .desencriptado): ")
+            print("¿Que sufijo quieres agregar a los archivos desencriptados para diferenciarlos? (por defecto .unaes)")
+            sufijo = input("Prefijo (en blanco para .unaes): ")
             if sufijo == "":
-                sufijo = ".desencriptado"
+                sufijo = ".unaes"
             print("")
             if nombreRsa != "":
                 clave = clavesRsa.desencriptar(nombreRsa, clave)
@@ -152,6 +161,7 @@ print("Selecciona una opcion\n")
 print("1) Encriptar archivo")
 print("2) Desencriptar archivo")
 print("3) Generar par de claves RSA")
+print("4) Administracion (ver claves)")
 opcion = input("\nEscribe un numero/opcion: ")
 print("")
 
@@ -161,7 +171,19 @@ match opcion:
     case "2":
         proceso_desencriptar()
     case "3":
+        #Opcion para generar claves RSA
         print("Las claves (archivos .pem) se almacenan segun el nombre del usuario, intentar hacer otras claves con el mismo nombre sobreescribirán las ya existentes.")
         clavesRsa.generar(input("Escribe tu nombre: "))
+    case "4":
+        print("Para esta accion (ver todas las claves AES128 sin encriptar) necesitas autenticarte como administrador")
+        print("Autenticando...")
+        if administracion.autenticar():
+            print("Autenticado correctamente, ¿Donde quieres guardar una copia sin encriptar de las claves?")
+            donde = print("Ubicacion: ")
+            print("")
+            administracion.mostrar_claves(donde)
+            print("Guardado. Tienes la responsabilidad de borrar luego ese archivo y usarlo para el bien")
+        else:
+            print("No hay permisos de acceso, por lo que no eres administrador")
     case _:
         print("Opcion invalida, ejecuta el programa de nuevo")
