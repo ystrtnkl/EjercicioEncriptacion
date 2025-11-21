@@ -1,23 +1,160 @@
 import clavesRsa
 import codificarAes
-
-clave = codificarAes.generar_clave()
-codificarAes.encriptar("Untitled.jpeg", "nuevo.jpeg", clave)
-codificarAes.desencriptar("nuevo.jpeg", "final.jpeg", clave)
+import empaquetar
+import os
+import sys
 
 print("Programa para encriptacion/desencriptacion de archivos")
 print("Selecciona una opcion\n")
 print("1) Encriptar archivo")
 print("2) Desencriptar archivo")
 print("3) Generar par de claves RSA")
-opcion = input("Escribe un numero: ")
+opcion = input("\nEscribe un numero/opcion: ")
+
+
+
+
+
+
+def proceso_encriptar():
+    print("Elige los archivos a encriptar (rutas separadas por espacios)")
+    archivos = input("Archivos: ")
+    print("")
+    archivos = archivos.split(" ")
+    correcto = True
+    if len(archivos) == 0:
+        correcto = False
+    else:
+        for e in archivos:
+            if os.path.exists(e) == False:
+                print("No se ha encontrado " + e)
+                correcto = False
+    if correcto:
+        decision_empaquetar = ""
+        if len(archivos) > 1:    
+            print("¿Deseas empaquetar los archivos encriptados en un solo archivo?")
+            decision_empaquetar = input("(en blanco = no, escribir nombre de archivo empaquetado = si): ")
+            print("")
+            
+        print("Se generara una clave AES128 aleatoria, ¿Deseas encriptar esta clave con una clave pública RSA? Ten en cuenta que solo quien tenga la clave privada podra desencriptarlos")
+        print("En caso de que si el nombre con la clave publica (tiene que haber en esta carpeta un archivo llamado <nombre>-publica.pem, si no lo hay reinicia el programa y usa la opcion 3)")
+        publica = input("(en blanco = no, escribir nombre = si): ")
+        print("")
+        if os.path.exists(publica + "-publica.pem") == False:
+            print("No se ha encontrado el archivo " + publica + "-publica.pem, la clave AES128 NO se encriptara (puedes cerrar el programa y volver a intentarlo con otro nombre)")
+            publica = ""
+        if publica != "":
+            aes128 = codificarAes.generar_clave()
+            print("¿Deseas mostrar la clave AES128 por consola o guardarla en un archivo? (si el archivo ya existe se sobreescribira)")
+            guardar_aes128 = input("(en blanco = mostrar por consola, escribir nombre de archivo = guardar en ese archivo): ")
+            print("")
+            aes128_encriptada = clavesRsa.encriptar(publica, aes128)
+            if guardar_aes128 == "":
+                print("Clave AES128 (para desencriptar los archivos) encriptada con la clave publica:")
+                print(aes128_encriptada)
+            else:
+                with open(guardar_aes128, "wb") as f:
+                    f.write(aes128_encriptada)
+                    print("Clave guardada en " + guardar_aes128)
+        else:
+            aes128 = codificarAes.generar_clave()
+            print("¿Deseas mostrar la clave AES128 por consola o guardarla en un archivo? (si el archivo ya existe se sobreescribira)")
+            guardar_aes128 = input("(en blanco = mostrar por consola, escribir nombre de archivo = guardar en ese archivo): ")
+            print("")
+            if guardar_aes128 == "":
+                print("Clave AES128 (para desencriptar los archivos):")
+                print(aes128)
+            else:
+                with open(guardar_aes128, "wb") as f:
+                    f.write(aes128)
+                    print("Clave guardada en " + guardar_aes128)
+                        
+        if decision_empaquetar == "":
+            sufijo = input("Sufijo para los archivos encriptados (por defecto .encriptado): ")
+            print("")
+            if sufijo == "":
+                sufijo = ".encriptado"
+            for e in archivos:
+                codificarAes.encriptar(e, e + sufijo, aes128)
+                    
+            print("Proceso finalizado, esto es lo que ha ocurrido:")
+            if guardar_aes128 == "":
+                guardar_aes128 = "la consola"
+            if publica == "":
+                    print("Se ha generado una version encriptada de los archivos " + ", ".join(archivos) + " acabados en " + sufijo + " y la clave para desencriptarlos esta en " + guardar_aes128 + ", dicha clave no esta encriptada (ten cuidado)")
+            else:
+                print("Se ha generado una version encriptada de los archivos " + ", ".join(archivos) + " acabados en " + sufijo + " y la clave para desencriptarlos esta en " + guardar_aes128 + " encriptada con RSA bajo el nombre de " + publica)
+        else:
+            empaquetar.empaquetar(decision_empaquetar + ".temp", archivos)
+            codificarAes.encriptar(decision_empaquetar + ".temp", decision_empaquetar, aes128)
+            os.remove(decision_empaquetar + ".temp")
+            print("Proceso finalizado, esto es lo que ha ocurrido:")
+            if guardar_aes128 == "":
+                    guardar_aes128 = "la consola"
+            if publica == "":
+                print("Los archivos " + ", ".join(archivos) + "se han empaquetado en " + decision_empaquetar + " encriptados bajo la clave AES128 que esta en " + guardar_aes128 + ", dicha clave no esta encriptada (ten cuidado)")
+            else:
+                print("Los archivos " + ", ".join(archivos) + "se han empaquetado en " + decision_empaquetar + " encriptados bajo la clave AES128 que esta en " + guardar_aes128 + " encriptada con RSA bajo el nombre de " + publica)
+    else:
+        print("Intentalo otra vez con archivos que existan")
+
+
+
+
+def proceso_desencriptar():
+    print("Antes de desencriptar, responde con sinceridad estas preguntas")
+    print("¿Tu archivo esta empaquetado?")
+    empaquetado = input("(en blanco = no, nombre del archivo empaquetado = si y usar ese archivo): ")
+    print("")
+    if empaquetado != "" and os.path.exists(empaquetado) == False:
+        print(empaquetado + " no se ha encontrado, saliendo...")
+        sys.exit()
+    print("¿Tu archivo fue encriptado con RSA? Si asi es se necesita el nombre de la clave Y tener guardada la clave privada")
+    nombreRsa = input("(en blanco = no fue encriptada, escribir nombre = fue encriptada Y desencriptar con ese nombre): ")
+    print("")
+    if nombreRsa != "" and os.path.exists(nombreRsa + "-privada.pem") == False:
+        print(empaquetado + "-privada.pem no se ha encontrado, es necesario tener la clave privada para desencriptar el AES128, y por lo tanto desencriptar el archivo. Saliendo...")
+        sys.exit()
+    print("¿Donde esta el archivo con la clave?")
+    clave = input("Introduce el nombre del archivo, si no existe dicho archivo se tomara como clave el texto escrito: ")
+    print("")
+    if os.path.exists(clave):
+        with open(clave, "rb") as f:
+            clave = f.read()
+
+    if empaquetado == "":
+        print("Elige los archivos a encriptar (rutas separadas por espacios)")
+        archivos = input("Archivos: ")
+        print("")
+        archivos = archivos.split(" ")
+        correcto = True
+        if len(archivos) == 0:
+            correcto = False
+        else:
+            for e in archivos:
+                if os.path.exists(e) == False:
+                    print("No se ha encontrado " + e)
+                    correcto = False
+        if correcto:
+            pass
+        else:
+            print("Intentalo otra vez con archivos que existan")
+    else:
+        pass
+    
+    
+    
+    
+
+
+
 match opcion:
     case "1":
-        pass
+        proceso_encriptar()
     case "2":
-        pass
+        proceso_desencriptar()
     case "3":
-        
+        print("Las claves (archivos .pem) se almacenan segun el nombre del usuario, intentar hacer otras claves con el mismo nombre sobreescribirán las ya existentes.")
         clavesRsa.generar(input("Escribe tu nombre: "))
     case _:
         print("Opcion invalida, ejecuta el programa de nuevo")
