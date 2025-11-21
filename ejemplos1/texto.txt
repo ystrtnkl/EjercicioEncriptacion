@@ -1,0 +1,6 @@
+texto en ascii/utf8 para codificar y usar como ejemplo
+áéíóúñÑ_:;)=?¿º!"·$%&/()=|@#~½¬{[]}
+1
+2
+3
+4
