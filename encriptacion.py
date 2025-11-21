@@ -10,7 +10,6 @@ def proceso_encriptar():
     print("Elige los archivos a encriptar (rutas separadas por espacios)")
     archivos = input("Archivos: ")
     print("")
-    archivos_original = archivos
     archivos = archivos.split(" ")
     correcto = True
     if len(archivos) == 0:
@@ -88,7 +87,7 @@ def proceso_encriptar():
                 print("Los archivos " + ", ".join(archivos) + "se han empaquetado en " + decision_empaquetar + " encriptados bajo la clave AES128 que esta en " + guardar_aes128 + " encriptada con RSA bajo el nombre de " + publica)
 
         if decision_empaquetar == "":
-            administracion.guardar_registro_clave(aes128, publica, archivos_original, sufijo)
+            administracion.guardar_registro_clave(aes128, publica, archivos, sufijo)
         else:
             administracion.guardar_registro_clave(aes128, publica, decision_empaquetar, sufijo)
     else:
@@ -179,7 +178,7 @@ match opcion:
         print("Autenticando...")
         if administracion.autenticar():
             print("Autenticado correctamente, ¿Donde quieres guardar una copia sin encriptar de las claves?")
-            donde = print("Ubicacion: ")
+            donde = input("Ubicacion: ")
             print("")
             administracion.mostrar_claves(donde)
             print("Guardado. Tienes la responsabilidad de borrar luego ese archivo y usarlo para el bien")

@@ -1,4 +1,5 @@
-*.pem
+
 archivosEncriptados
 archivosDesencriptados
 __pycache__
+.aes
