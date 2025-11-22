@@ -4,8 +4,9 @@ import codificarAes
 
 #Crea un registro en claves.bin para el administrador a partir de los datos de una encriptacion. claves.bin esta encriptado mediante la AES128 del admin, encriptada con las RSA de admin-privada.pem y admin-publica.pem
 def guardar_registro_clave(clave, nombre, archivos, sufijo):
-    archivos_str = ", ".join(archivos)
-    linea = f"{nombre}: {archivos_str} == {clave}\n".encode("utf-8")
+    archivos_str = ", ".join(archivos) + "(" + sufijo + ")"
+    #linea = f"{nombre}: {archivos_str} == {clave}\n".encode("utf-8")
+    linea = f"{nombre}: {archivos_str} == ".encode("utf-8") + clave + b"\n" #Informacion en texto + clave en binario (puede neceistar conversion externa a binario para guardarlo en un archivo aislado)
     with open("admin.key", "rb") as f:
         encrypted_admin_key = f.read()
     admin_aes_key = clavesRsa.desencriptar("admin", encrypted_admin_key)

@@ -182,6 +182,7 @@ match opcion:
             print("")
             administracion.mostrar_claves(donde)
             print("Guardado. Tienes la responsabilidad de borrar luego ese archivo y usarlo para el bien")
+            print("Las claves estan ahora guardadas en un archivo de texto sin encriptar pero estan en formato binario, copialas en un archivo aparte y usalo como clave para desencriptar (es posible que tengas que convertirlo de vuelta a binario)")
         else:
             print("No hay permisos de acceso, por lo que no eres administrador")
     case _:
