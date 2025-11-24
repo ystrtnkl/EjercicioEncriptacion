@@ -1,6 +1,0 @@
-texto en ascii/utf8 para codificar y usar como ejemplo
-áéíóúñÑ_:;)=?¿º!"·$%&/()=|@#~½¬{[]} <- (esto es para probar distintos carácteres, no es que se haya corrompido)
-1
-2
-3
-4
