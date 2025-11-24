@@ -1,5 +1,6 @@
 # Encriptaciones
 Programa para encriptar y desencriptar archivos usando AES128 y RSA
+- Para más información consulta el pdf
 
 # Funcionamiento
 - Se encripta un archivo/archivos(a elegir por el usuario) usando AES128, la clave aleatoria generada luego se encripta con una clave pública RSA (opcional y a elegir por el usuario)

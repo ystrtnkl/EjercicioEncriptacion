@@ -4,24 +4,31 @@ import empaquetar
 import administracion
 import os
 import sys
+import shlex
+import rutas
+
 
 #Lo que ocurre en la opcion de encriptar
 def proceso_encriptar():
     print("Elige los archivos a encriptar (rutas separadas por espacios)")
     archivos = input("Archivos: ")
     print("")
-    archivos = archivos.split(" ")
+    #archivos = archivos.split(" ")
     correcto = True
-    if len(archivos) == 0:
-        correcto = False
+    if os.path.isdir(archivos) == False:
+        archivos = shlex.split(archivos)
+        if len(archivos) == 0:
+            correcto = False
+        else:
+            for e in archivos:
+                if os.path.exists(rutas.normalizar_ruta(e)) == False:
+                    print("No se ha encontrado " + e)
+                    correcto = False
     else:
-        for e in archivos:
-            if os.path.exists(e) == False:
-                print("No se ha encontrado " + e)
-                correcto = False
+        print("ATENCION: debido a diferencias entre sistemas operativos, es posible que empaquetar una carpeta (en lugar de archivos) pueda generar errores.")
     if correcto:
         decision_empaquetar = ""
-        if len(archivos) > 1:    
+        if len(archivos) > 1 or os.path.isdir(archivos):    
             print("¿Deseas empaquetar los archivos encriptados en un solo archivo?")
             decision_empaquetar = input("(en blanco = no, escribir nombre de archivo empaquetado = si, usando ese archivo): ")
             print("")
@@ -43,7 +50,7 @@ def proceso_encriptar():
                 print("Clave AES128 (para desencriptar los archivos) encriptada con la clave publica:")
                 print(aes128_encriptada)
             else:
-                with open(guardar_aes128, "wb") as f:
+                with open(rutas.normalizar_ruta(guardar_aes128), "wb") as f:
                     f.write(aes128_encriptada)
                     print("Clave guardada en " + guardar_aes128)
         else:
@@ -55,7 +62,7 @@ def proceso_encriptar():
                 print("Clave AES128 (para desencriptar los archivos):")
                 print(aes128)
             else:
-                with open(guardar_aes128, "wb") as f:
+                with open(rutas.normalizar_ruta(guardar_aes128), "wb") as f:
                     f.write(aes128)
                     print("Clave guardada en " + guardar_aes128)
                         
@@ -75,7 +82,7 @@ def proceso_encriptar():
             else:
                 print("Se ha generado una version encriptada de los archivos " + ", ".join(archivos) + " acabados en " + sufijo + " y la clave para desencriptarlos esta en " + guardar_aes128 + " encriptada con RSA bajo el nombre de " + publica)
         else:
-            empaquetar.empaquetar(decision_empaquetar + ".temp", archivos)
+            empaquetar.empaquetar(rutas.normalizar_ruta(decision_empaquetar) + ".temp", archivos)
             codificarAes.encriptar(decision_empaquetar + ".temp", decision_empaquetar, aes128)
             os.remove(decision_empaquetar + ".temp")
             print("Proceso finalizado, esto es lo que ha ocurrido:")
@@ -89,7 +96,7 @@ def proceso_encriptar():
         if decision_empaquetar == "":
             administracion.guardar_registro_clave(aes128, publica, archivos, sufijo)
         else:
-            administracion.guardar_registro_clave(aes128, publica, decision_empaquetar, sufijo)
+            administracion.guardar_registro_clave(aes128, publica, decision_empaquetar, " (empaquetado)")
     else:
         print("Intentalo otra vez con archivos que existan")
 
@@ -99,7 +106,7 @@ def proceso_desencriptar():
     print("¿Tu archivo esta empaquetado?")
     empaquetado = input("(en blanco = no, nombre del archivo empaquetado = si y usar ese archivo): ")
     print("")
-    if empaquetado != "" and os.path.exists(empaquetado) == False:
+    if empaquetado != "" and os.path.exists(rutas.normalizar_ruta(empaquetado)) == False:
         print(empaquetado + " no se ha encontrado, saliendo...")
         sys.exit()
     print("¿Tu clave AES128 fue encriptada con RSA? Si asi es se necesita el nombre de la clave Y tener guardada la clave privada")
@@ -111,21 +118,22 @@ def proceso_desencriptar():
     print("¿Donde esta el archivo con la clave?")
     clave = input("Introduce el nombre del archivo, si no existe dicho archivo se tomara como clave el texto escrito: ")
     print("")
-    if os.path.exists(clave):
-        with open(clave, "rb") as f:
+    if os.path.exists(rutas.normalizar_ruta(clave)):
+        with open(rutas.normalizar_ruta(clave), "rb") as f:
             clave = f.read()
 
     if empaquetado == "":
-        print("Elige los archivos a encriptar (rutas separadas por espacios)")
+        print("Elige los archivos a desencriptar (rutas separadas por espacios)")
         archivos = input("Archivos: ")
         print("")
-        archivos = archivos.split(" ")
+        #archivos = archivos.split(" ")
+        archivos = shlex.split(archivos)
         correcto = True
         if len(archivos) == 0:
             correcto = False
         else:
             for e in archivos:
-                if os.path.exists(e) == False:
+                if os.path.exists(rutas.normalizar_ruta(e)) == False:
                     print("No se ha encontrado " + e)
                     correcto = False
         if correcto:
@@ -146,6 +154,8 @@ def proceso_desencriptar():
         print("")
         if carpeta == "":
             carpeta = "."
+        else:
+            carpeta = rutas.normalizar_ruta(carpeta)
         if nombreRsa != "":
             clave = clavesRsa.desencriptar(nombreRsa, clave)
         codificarAes.desencriptar(empaquetado, empaquetado + ".temp", clave)
@@ -161,6 +171,8 @@ print("1) Encriptar archivo")
 print("2) Desencriptar archivo")
 print("3) Generar par de claves RSA")
 print("4) Administracion (ver claves)")
+print("4) Informacion")
+print("5) Salir")
 opcion = input("\nEscribe un numero/opcion: ")
 print("")
 
@@ -185,5 +197,13 @@ match opcion:
             print("Las claves estan ahora guardadas en un archivo de texto sin encriptar pero estan en formato binario, copialas en un archivo aparte y usalo como clave para desencriptar (es posible que tengas que convertirlo de vuelta a binario)")
         else:
             print("No hay permisos de acceso, por lo que no eres administrador")
+    case "5":
+        print("Consulta mas informacion en README.md o en el pdf")
+    case "6":
+        print("SALIENDO...")
+        exit()
     case _:
         print("Opcion invalida, ejecuta el programa de nuevo")
+print("")
+print("")
+input("(ENTER para salir)")

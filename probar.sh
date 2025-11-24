@@ -14,3 +14,5 @@ docker run -it --rm -v "$(pwd)":/app -u $(id -u):$(id -g) entorno-python sh -c "
 pip install pyinstaller
 pyinstaller --onefile --clean --noconfirm encriptacion.py
 
+#build en linux y ejecutar todo en uno (solo desarrollo)
+docker run -it --rm -v "$(pwd)":/app -u $(id -u):$(id -g) entorno-python sh -c "cd /app && pyinstaller --onefile --clean --noconfirm encriptacion.py" ; rm -rf build-linux ; mv build build-linux ; cd dist ; echo "" > claves.bin ; ./encriptacion

@@ -3,3 +3,8 @@ archivosEncriptados
 archivosDesencriptados
 __pycache__
 .aes
+hola-privada.pem
+hola-publica.pem
+*pyc
+ejemplos1
+ejemplos2
