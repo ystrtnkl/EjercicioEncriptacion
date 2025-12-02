@@ -15,17 +15,17 @@ def proceso_encriptar():
     print("")
     #archivos = archivos.split(" ")
     correcto = True
-    if os.path.isdir(archivos) == False:
-        archivos = shlex.split(archivos)
-        if len(archivos) == 0:
-            correcto = False
-        else:
-            for e in archivos:
-                if os.path.exists(rutas.normalizar_ruta(e)) == False:
-                    print("No se ha encontrado " + e)
-                    correcto = False
-    else:
-        print("ATENCION: debido a diferencias entre sistemas operativos, es posible que empaquetar una carpeta (en lugar de archivos) pueda generar errores.")
+    #if os.path.isdir(archivos) == False:
+    #    archivos = shlex.split(archivos)
+    #    if len(archivos) == 0:
+    #        correcto = False
+    #    else:
+    #        for e in archivos:
+    #            if os.path.exists(rutas.normalizar_ruta(e)) == False:
+    #                print("No se ha encontrado " + e)
+    #                correcto = False
+    #else:
+    #    print("ATENCION: debido a diferencias entre sistemas operativos, es posible que empaquetar una carpeta (en lugar de archivos) pueda generar errores.")
     if correcto:
         decision_empaquetar = ""
         if len(archivos) > 1 or os.path.isdir(archivos):    

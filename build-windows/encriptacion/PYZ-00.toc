@@ -1,5 +1,5 @@
 ('\\\\vmware-host\\Shared '
- 'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\build\\encriptacion\\PYZ-00.pyz',
+ 'Folders\\F\\Escritorio\\EjercicioEncriptacion\\build\\encriptacion\\PYZ-00.pyz',
  [('__future__',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\__future__.py',
    'PYMODULE'),
@@ -35,7 +35,7 @@
    'PYMODULE'),
   ('administracion',
    '\\\\vmware-host\\Shared '
-   'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\administracion.py',
+   'Folders\\F\\Escritorio\\EjercicioEncriptacion\\administracion.py',
    'PYMODULE'),
   ('annotationlib',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\annotationlib.py',
@@ -60,14 +60,14 @@
    'PYMODULE'),
   ('clavesRsa',
    '\\\\vmware-host\\Shared '
-   'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\clavesRsa.py',
+   'Folders\\F\\Escritorio\\EjercicioEncriptacion\\clavesRsa.py',
    'PYMODULE'),
   ('codeop',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\codeop.py',
    'PYMODULE'),
   ('codificarAes',
    '\\\\vmware-host\\Shared '
-   'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\codificarAes.py',
+   'Folders\\F\\Escritorio\\EjercicioEncriptacion\\codificarAes.py',
    'PYMODULE'),
   ('compression',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\__init__.py',
@@ -281,7 +281,7 @@
    'PYMODULE'),
   ('empaquetar',
    '\\\\vmware-host\\Shared '
-   'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\empaquetar.py',
+   'Folders\\F\\Escritorio\\EjercicioEncriptacion\\empaquetar.py',
    'PYMODULE'),
   ('fnmatch',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\fnmatch.py',
@@ -441,7 +441,7 @@
    'PYMODULE'),
   ('rutas',
    '\\\\vmware-host\\Shared '
-   'Folders\\F\\Escritorio\\LAB\\EjercicioEncriptacion\\rutas.py',
+   'Folders\\F\\Escritorio\\EjercicioEncriptacion\\rutas.py',
    'PYMODULE'),
   ('selectors',
    'C:\\Users\\3l0is\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\selectors.py',
